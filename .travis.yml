@@ -13,30 +13,32 @@ install:
 script:
   - echo "Triggered docker builds"
   - echo "Starting build udagram-api-feed."
-  - cd ./udagram-api-feed && ./docker_build.sh && cd ..
+  - docker build -t udagram-api-feed ./udagram-api-feed && docker tag udagram-api-feed $DOCKER_HUB/udagram-api-feed:latest
   - echo "Finished build udagram-api-feed."
   - echo "Starting build udagram-api-user."
-  - cd ./udagram-api-user && ./docker_build.sh && cd ..
+  - docker build -t udagram-api-user ./udagram-api-user && docker tag udagram-api-user $DOCKER_HUB/udagram-api-user:latest
   - echo "Finished build udagram-api-user."
   - echo "Starting build udagram-frontend."
-  - cd ./udagram-frontend && ./docker_build.sh && cd ..
+  - docker build -t udagram-frontend ./udagram-frontend && docker tag udagram-frontend $DOCKER_HUB/udagram-frontend:latest
   - echo "Finished build udagram-frontend."
   - echo "Starting build udagram-reverseproxy."
-  - cd ./udagram-reverseproxy && ./docker_build.sh && cd ..
+  - docker build -t udagram-reverseproxy ./udagram-reverseproxy && docker tag udagram-reverseproxy $DOCKER_HUB/udagram-reverseproxy:latest
   - echo "Finished build udagram-reverseproxy."
 
 after_success:
+  - echo "Authenticating in Dockerhub"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - echo "Triggered docker push"
   - echo "Starting push udagram-api-feed."
-  - cd ./udagram-api-feed && ./docker_push.sh && cd ..
+  - docker push $DOCKER_HUB/udagram-api-feed
   - echo "Finished push udagram-api-feed."
   - echo "Starting push udagram-api-user."
-  - cd ./udagram-api-user && ./docker_push.sh && cd ..
+  - docker push $DOCKER_HUB/udagram-api-user
   - echo "Finished push udagram-api-user."
   - echo "Starting push udagram-frontend."
-  - cd ./udagram-frontend && ./docker_push.sh && cd ..
+  - docker push $DOCKER_HUB/udagram-frontend
   - echo "Finished push udagram-frontend."
   - echo "Starting push udagram-reverseproxy."
-  - cd ./udagram-reverseproxy && ./docker_push.sh && cd ..
+  - docker push $DOCKER_HUB/udagram-reverseproxy
   - echo "Finished push udagram-reverseproxy."
   - echo "Finished CI process OK"
