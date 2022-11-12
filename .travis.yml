@@ -1,0 +1,42 @@
+
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+
+# Pre-testing installs
+install:
+  - echo "nothing needs to be installed"
+
+script:
+  - echo "Triggered docker builds"
+  - echo "Starting build udagram-api-feed."
+  - cd ./udagram-api-feed && ./docker_build.sh && cd ..
+  - echo "Finished build udagram-api-feed."
+  - echo "Starting build udagram-api-user."
+  - cd ./udagram-api-user && ./docker_build.sh && cd ..
+  - echo "Finished build udagram-api-user."
+  - echo "Starting build udagram-frontend."
+  - cd ./udagram-frontend && ./docker_build.sh && cd ..
+  - echo "Finished build udagram-frontend."
+  - echo "Starting build udagram-reverseproxy."
+  - cd ./udagram-reverseproxy && ./docker_build.sh && cd ..
+  - echo "Finished build udagram-reverseproxy."
+
+after_success:
+  - echo "Triggered docker push"
+  - echo "Starting push udagram-api-feed."
+  - cd ./udagram-api-feed && ./docker_push.sh && cd ..
+  - echo "Finished push udagram-api-feed."
+  - echo "Starting push udagram-api-user."
+  - cd ./udagram-api-user && ./docker_push.sh && cd ..
+  - echo "Finished push udagram-api-user."
+  - echo "Starting push udagram-frontend."
+  - cd ./udagram-frontend && ./docker_push.sh && cd ..
+  - echo "Finished push udagram-frontend."
+  - echo "Starting push udagram-reverseproxy."
+  - cd ./udagram-reverseproxy && ./docker_push.sh && cd ..
+  - echo "Finished push udagram-reverseproxy."
+  - echo "Finished CI process OK"
