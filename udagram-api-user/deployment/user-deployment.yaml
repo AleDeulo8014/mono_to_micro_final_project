@@ -18,6 +18,13 @@ spec:
       - name: backend-user
         image: alterdeulo/udagram-api-user
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "500m"
+          limits:
+            memory: "2048Mi"
+            cpu: "1000m" 
         ports:
         - containerPort: 8080
         env:
