@@ -14,10 +14,18 @@ spec:
       labels:
         app: backend-feed
     spec:
+      serviceAccountName: my-s3-cluster-account
       containers:
       - name: backend-feed
         image: alterdeulo/udagram-api-feed
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "500m"
+          limits:
+            memory: "2048Mi"
+            cpu: "1000m" 
         ports:
         - containerPort: 8080
         env:
@@ -71,15 +79,12 @@ spec:
                 name: env-secret
                 key: JWT_SECRET
                 optional: false
-          - name: aws_access_key_id
-            valueFrom:
-              secretKeyRef:
-                name: aws-secret
-                key: aws_access_key_id
-                optional: false
-          - name: aws_secret_access_key
-            valueFrom:
-              secretKeyRef:
-                name: aws-secret
-                key: aws_secret_access_key
-                optional: false
+        volumeMounts:
+        - name: aws-secret
+          mountPath: "/root/.aws/"
+          readOnly: true
+      volumes:
+      - name: aws-secret
+        secret:
+          secretName: aws-secret
+      restartPolicy: Always
