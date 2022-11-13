@@ -71,15 +71,12 @@ spec:
                 name: env-secret
                 key: JWT_SECRET
                 optional: false
-          - name: aws_access_key_id
-            valueFrom:
-              secretKeyRef:
-                name: aws-secret
-                key: aws_access_key_id
-                optional: false
-          - name: aws_secret_access_key
-            valueFrom:
-              secretKeyRef:
-                name: aws-secret
-                key: aws_secret_access_key
-                optional: false
+        volumeMounts:
+        - name: aws-secret
+          mountPath: "/root/.aws/"
+          readOnly: true
+      volumes:
+      - name: aws-secret
+        secret:
+          secretName: aws-secret
+      restartPolicy: Always
