@@ -12,7 +12,7 @@ spec:
         service: reverseproxy
     spec:
       containers:
-      - image: alterdeulo/my-reverse-proxy
+      - image: alterdeulo/udagram-reverseproxy
         name: reverseproxy
         imagePullPolicy: Always          
         resources:
